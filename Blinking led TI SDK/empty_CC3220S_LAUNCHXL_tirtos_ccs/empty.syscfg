@@ -1,0 +1,68 @@
+/**
+ * These arguments were used when this file was generated. They will be automatically applied on subsequent loads
+ * via the GUI or CLI. Run CLI with '--help' for additional information on how to override these arguments.
+ * @cliArgs --board "/ti/boards/CC3220S_LAUNCHXL" --product "simplelink_cc32xx_sdk@5.20.00.06"
+ * @versions {"data":"2021031521","timestamp":"2021031521","tool":"1.8.0+1863","templates":null}
+ */
+
+/**
+ * Import the modules used in this configuration.
+ */
+const Display  = scripting.addModule("/ti/display/Display", {}, false);
+const Display1 = Display.addInstance();
+const GPIO     = scripting.addModule("/ti/drivers/GPIO");
+const RTOS     = scripting.addModule("/ti/drivers/RTOS");
+const Button   = scripting.addModule("/ti/drivers/apps/Button", {}, false);
+const Button1  = Button.addInstance();
+const Button2  = Button.addInstance();
+const LED      = scripting.addModule("/ti/drivers/apps/LED", {}, false);
+const LED1     = LED.addInstance();
+const LED2     = LED.addInstance();
+const LED3     = LED.addInstance();
+
+/**
+ * Write custom configuration values to the imported modules.
+ */
+Display1.$name      = "CONFIG_Display_0";
+Display1.$hardware  = system.deviceData.board.components.XDS110UART;
+Display1.uart.$name = "CONFIG_UART_0";
+
+const Power          = scripting.addModule("/ti/drivers/Power", {}, false);
+Power.parkPins.$name = "ti_drivers_power_PowerCC32XXPins0";
+
+Button1.$name         = "CONFIG_BUTTON_0";
+Button1.$hardware     = system.deviceData.board.components.SW2;
+Button1.gpioPin.$name = "CONFIG_GPIO_0";
+
+Button2.$name         = "CONFIG_BUTTON_1";
+Button2.$hardware     = system.deviceData.board.components.SW3;
+Button2.gpioPin.$name = "CONFIG_GPIO_1";
+
+LED1.$name     = "CONFIG_LED_0";
+LED1.$hardware = system.deviceData.board.components.LED_GREEN;
+LED1.dimmable  = true;
+
+LED2.$name     = "CONFIG_LED_1";
+LED2.dimmable  = true;
+LED2.$hardware = system.deviceData.board.components.LED_YELLOW;
+
+LED3.$name     = "CONFIG_LED_2";
+LED3.dimmable  = true;
+LED3.$hardware = system.deviceData.board.components.LED_RED;
+
+/**
+ * Pinmux solution for unlocked pins/peripherals. This ensures that minor changes to the automatic solver in a future
+ * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
+ * re-solve from scratch.
+ */
+Display1.uart.uart.$suggestSolution       = "UART1";
+Display1.uart.uart.txPin.$suggestSolution = "55";
+Display1.uart.uart.rxPin.$suggestSolution = "57";
+Button1.gpioPin.gpioPin.$suggestSolution  = "boosterpack.3";
+Button2.gpioPin.gpioPin.$suggestSolution  = "boosterpack.11";
+LED1.pwmPin.timer.$suggestSolution        = "Timer3";
+LED1.pwmPin.timer.pwmPin.$suggestSolution = "boosterpack.10";
+LED2.pwmPin.timer.$suggestSolution        = "Timer3";
+LED2.pwmPin.timer.pwmPin.$suggestSolution = "boosterpack.9";
+LED3.pwmPin.timer.$suggestSolution        = "Timer2";
+LED3.pwmPin.timer.pwmPin.$suggestSolution = "boosterpack.29";
