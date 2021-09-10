@@ -10,13 +10,13 @@
 
 enum LIGHT { red = 5, yellow = 1, green = 4 };
 
-int lamp = red;
+int current = red;
 int flag = 1;
 int timer = 0;
 
 void INT(){
     timer++;
-    if(timer >= 10 * lamp){
+    if(timer >= 10 * current){
         flag = 1;
         timer = 0;
     }
@@ -38,24 +38,24 @@ int main(){
     while(1){
        if(flag == 1){
            flag = 0;
-           switch (lamp){
-               case red:
-                   GPIO_write(CONFIG_GPIO_LED_0, CONFIG_GPIO_LED_ON);
-                   GPIO_write(CONFIG_GPIO_LED_1, CONFIG_GPIO_LED_OFF);
-                   GPIO_write(CONFIG_GPIO_LED_2, CONFIG_GPIO_LED_OFF);
-                   lamp = yellow;
-                   break;
-               case yellow:
-                  GPIO_write(CONFIG_GPIO_LED_0, CONFIG_GPIO_LED_OFF);
-                  GPIO_write(CONFIG_GPIO_LED_1, CONFIG_GPIO_LED_ON);
-                  GPIO_write(CONFIG_GPIO_LED_2, CONFIG_GPIO_LED_OFF);
-                  lamp = green;
-                  break;
+           switch (current){
                case green:
-                  GPIO_write(CONFIG_GPIO_LED_0, CONFIG_GPIO_LED_OFF);
-                  GPIO_write(CONFIG_GPIO_LED_1, CONFIG_GPIO_LED_OFF);
-                  GPIO_write(CONFIG_GPIO_LED_2, CONFIG_GPIO_LED_ON);
-                  lamp = red;
+                   GPIO_write(CONFIG_LED_0_GPIO, CONFIG_GPIO_LED_ON);
+                   GPIO_write(CONFIG_LED_1_GPIO, CONFIG_GPIO_LED_OFF);
+                   GPIO_write(CONFIG_LED_2_GPIO, CONFIG_GPIO_LED_OFF);
+                   current = red;
+                   break;
+               case red:
+                  GPIO_write(CONFIG_LED_0_GPIO, CONFIG_GPIO_LED_OFF);
+                  GPIO_write(CONFIG_LED_1_GPIO, CONFIG_GPIO_LED_ON);
+                  GPIO_write(CONFIG_LED_2_GPIO, CONFIG_GPIO_LED_OFF);
+                  current = yellow;
+                  break;
+               case yellow:
+                  GPIO_write(CONFIG_LED_0_GPIO, CONFIG_GPIO_LED_OFF);
+                  GPIO_write(CONFIG_LED_1_GPIO, CONFIG_GPIO_LED_OFF);
+                  GPIO_write(CONFIG_LED_2_GPIO, CONFIG_GPIO_LED_ON);
+                  current = green;
                   break;
            }
        }
