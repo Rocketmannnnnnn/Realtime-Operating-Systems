@@ -247,6 +247,7 @@ defaultHandler(void)
     }
 }
 
+volatile int flag;
 
 static unsigned int timer = 0;
 

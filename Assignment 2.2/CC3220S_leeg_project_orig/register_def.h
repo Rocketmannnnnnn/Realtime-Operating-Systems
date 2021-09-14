@@ -40,6 +40,6 @@
 #include "inc/hw_udma.h"
 #include "inc/hw_wdt.h"
 
-volatile int flag;
+
 
 #endif /* REGISTER_DEF_H_ */

@@ -21,7 +21,9 @@ void assignment1()
         HWREG(OCP_SHARED_BASE + OCP_SHARED_O_GPIO_PAD_CONFIG_9) = 0x40;
         HWREG(OCP_SHARED_BASE + OCP_SHARED_O_GPIO_PAD_CONFIG_10) = 0x40;
         HWREG(OCP_SHARED_BASE + OCP_SHARED_O_GPIO_PAD_CONFIG_11) = 0x40;
-
+        //TODO
+        HWREG(GPIOA1_BASE + GPIO_O_GPIO_DIR) = led;
+        
         int c;
         int led = 0;
 
@@ -33,7 +35,7 @@ void assignment1()
                 led = 0;
             }
 
-            HWREG(GPIOA1_BASE + GPIO_O_GPIO_DIR) = led;
+            
             HWREG(GPIOA1_BASE + (GPIO_O_GPIO_DATA + (led << 2))) = led;
             led += 2;
         }
