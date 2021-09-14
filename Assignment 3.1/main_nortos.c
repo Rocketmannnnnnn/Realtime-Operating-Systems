@@ -31,7 +31,6 @@ typedef struct {
 } TaskHolder;
 
 //Globals
-volatile int flag = 1;
 static TaskHolder *head = NULL;
 
 //Function defenitions;
