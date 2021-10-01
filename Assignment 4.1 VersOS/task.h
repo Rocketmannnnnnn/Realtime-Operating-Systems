@@ -23,9 +23,11 @@ typedef struct _task{
 
 	void(*function)(void);				//function to execute
 	enum taskState	state;				//Tasks have a state
-	uint32_t 		uiPriority;			//Tasks have a priority
+    uint32_t        uiPriority;         //Tasks have a priority
+    uint32_t        originalPriority;   //Nessecary to
 	uint32_t		uiCounter;			//Tasks have a counter for delays
-
+	uint32_t        starvationSkips;    //A counter to prevent starvation
+	uint32_t        workingTime;
 	char			bInitialized;		//After initialization the stack also contains R4-R11
 } task;
 

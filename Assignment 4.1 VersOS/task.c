@@ -84,9 +84,10 @@ void addTaskToList(void(*function)(void), int stackSize, int priority)
 	 * Initialize the task properties
 	 */
 	currentTask->state 			= WAITING;
+	currentTask->starvationSkips = 0;
 	currentTask->bInitialized 	= 0;
 	currentTask->uiPriority 	= priority;
-
+	currentTask->originalPriority = priority;
 
 	return;
 }

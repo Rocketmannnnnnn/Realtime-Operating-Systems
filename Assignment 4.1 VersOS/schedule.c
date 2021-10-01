@@ -158,7 +158,8 @@ void schedule(void)
  */
 task * getNextTask(void)
 {
-	static int i=0;
+	/*
+    static int i=0;
 
 	while(taskList[++i].function == 0)
 	{
@@ -167,6 +168,57 @@ task * getNextTask(void)
 			i = -1;
 		}
 	}
-
 	return &taskList[i];
+	*/
+    task* temp;
+    for(int i = 0; i < MAX_TASKS; i++){
+        if (taskList[i].function != 0)
+        {
+            //Make sure there is a task
+            if(temp->function == 0){
+                if(taskList[i].function == 0){
+                    continue;
+                }else{
+                    temp = &taskList[i];
+                }
+            }
+
+            //Set highest (lowest number) priority first
+            if(temp->uiPriority > taskList[i].uiPriority){
+
+                temp = &taskList[i];
+            }
+            //Shortest job first
+            else if(temp->uiPriority == taskList[i].uiPriority){
+                if(temp->workingTime > taskList[i].workingTime){
+                    temp = &taskList[i];
+                }
+            }
+        }
+    }
+
+    for(int i = 0; i < MAX_TASKS; i++){
+        if(taskList[i].function != 0){
+            if(&taskList[i] == temp){
+                temp->uiPriority = temp->originalPriority;
+                temp->starvationSkips = 0;
+            }
+            else{
+                preventStarvation(&taskList[i]);
+            }
+        }
+    }
+
+    return temp;
+}
+
+void preventStarvation(task* t){
+    //Increase waiting timer
+    t->starvationSkips++;
+
+    //Increase priority if it is equal to the MAX_TASKS
+    if(t->starvationSkips >= MAX_TASKS && t->uiPriority > 0){
+        t->uiPriority--;
+        t->starvationSkips = 0;
+    }
 }

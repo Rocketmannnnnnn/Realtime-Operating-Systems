@@ -29,5 +29,6 @@ void writeMSP(void * ptr);
 //The Scheduler
 void schedule(void);
 task * getNextTask(void);
+void preventStarvation(task* t);
 
 #endif /* SCHEDULE_H_ */
