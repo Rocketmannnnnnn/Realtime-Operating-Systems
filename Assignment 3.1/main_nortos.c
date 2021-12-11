@@ -11,15 +11,14 @@
 //Enums & constants
 enum STATES { waiting, ready };
 enum COLOUR { red, yellow, green };
-int periodTime[3] = { 200, 500, 750 }; //Length of period
-int delayTime[3] = { 100, 200, 300 };
 
 //Structs
 typedef struct {
     enum STATES state;
-    enum COLOUR color;
-    int counter;
+    int periodCounter;
+    int totalPeriod;
     int delay;
+    int totalDelay;
     void (*pointerNaarFunc)(int, int);
 } Task;
 
@@ -34,7 +33,9 @@ static TaskHolder* head = NULL;
 //Function definitions;
 void addTask(enum COLOUR color);
 void runReadyTasks();
-void setLed(int ledIndex, int power);
+void setRed(int power);
+void setYellow(int power);
+void setGreen(int power);
 
 void INT() {
     TaskHolder* node;
@@ -51,13 +52,13 @@ void INT() {
             }
             break;
         case ready:
-            if (node->task.counter <= 0) {
+            if (node->task.periodCounter <= 0) {
                 node->task.state = waiting;
-                node->task.delay = delayTime[node->task.color];
-                node->task.counter = periodTime[node->task.color];
+                node->task.delay = node->task.totalDelay;
+                node->task.periodCounter = node->task.totalPeriod;
             }
             else {
-                node->task.counter--;
+                node->task.periodCounter--;
             }
             break;
         default:
@@ -79,10 +80,27 @@ void addTask(enum COLOUR color) {
         head = t;
     }
     head->task.state = waiting;
-    head->task.color = color;
-    head->task.delay = delayTime[color];
-    head->task.counter = periodTime[color];
-    head->task.pointerNaarFunc = setLed;
+
+    if(color == red){
+        head->task.delay = 200;
+        head->task.totalDelay = 200;
+        head->task.periodCounter = 100;
+        head->task.totalPeriod = 100;
+        head->task.pointerNaarFunc = setRed;
+    }else if (color == yellow){
+        head->task.delay = 500;
+        head->task.totalDelay = 500;
+        head->task.periodCounter = 200;
+        head->task.totalPeriod = 200;
+        head->task.pointerNaarFunc = setYellow;
+    }else if (color == green){
+        head->task.delay = 750;
+        head->task.totalDelay = 750;
+        head->task.periodCounter = 300;
+        head->task.totalPeriod = 300;
+        head->task.pointerNaarFunc = setGreen;
+    }
+
 }
 
 void runReadyTasks() {
@@ -90,22 +108,22 @@ void runReadyTasks() {
     node = head;
     while (node != NULL) {
         if (node->task.state == ready) {
-            node->task.pointerNaarFunc(node->task.color, CONFIG_GPIO_LED_ON);
+            node->task.pointerNaarFunc(node->task.periodCounter, CONFIG_GPIO_LED_ON);
         }
         node = node->next;
     }
 }
 
-void setLed(int ledIndex, int power) {
-    if (ledIndex == 0) {
-        GPIO_write(CONFIG_GPIO_LED_GREEN, power);
-    }
-    if (ledIndex == 1) {
-        GPIO_write(CONFIG_GPIO_LED_YELLOW, power);
-    }
-    if (ledIndex == 2) {
-        GPIO_write(CONFIG_GPIO_LED_RED, power);
-    }
+void setRed(int power){
+    GPIO_write(CONFIG_GPIO_LED_RED, power);
+}
+
+void setYellow(int power){
+    GPIO_write(CONFIG_GPIO_LED_YELLOW, power);
+}
+
+void setGreen(int power){
+    GPIO_write(CONFIG_GPIO_LED_GREEN, power);
 }
 
 int main() {
